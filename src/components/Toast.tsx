@@ -20,13 +20,19 @@ export function Toast() {
 
   if (!toast) return null;
 
+  // key remonta o elemento a cada toast novo, para a entrada tocar de
+  // novo em vez de o texto trocar sem aviso. A centralização horizontal
+  // vive dentro do keyframe .anim-toast, não numa classe translate —
+  // senão a animação sobrescreveria o transform e o toast sairia do
+  // centro ao entrar.
   return (
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-20 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-md border border-accent/30 bg-card px-4 py-3 text-sm text-primary shadow-none md:bottom-6"
+      key={toast.id}
+      className="anim-toast fixed bottom-20 left-1/2 z-50 flex items-center gap-2 rounded-md border border-accent/30 bg-card px-4 py-3 text-sm text-primary shadow-none md:bottom-6"
     >
-      <CheckCircle2 size={16} className="shrink-0 text-accent" />
+      <CheckCircle2 size={16} aria-hidden="true" className="shrink-0 text-accent" />
       {toast.mensagem}
     </div>
   );

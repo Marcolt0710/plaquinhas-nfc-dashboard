@@ -36,10 +36,12 @@ export function Modal({ titulo, onFechar, children, largura = "md" }: ModalProps
         type="button"
         aria-label="Fechar"
         onClick={onFechar}
-        className="absolute inset-0 bg-black/60"
+        className="anim-fundo absolute inset-0 bg-black/60"
       />
+      {/* No celular o modal nasce de baixo, que é de onde ele encosta na
+          tela; no desktop ele só surge no lugar (ver .anim-modal). */}
       <div
-        className={`relative flex max-h-[90vh] w-full flex-col overflow-hidden rounded-t-lg border border-border bg-card pb-[env(safe-area-inset-bottom)] md:m-4 md:rounded-lg md:pb-0 ${LARGURAS[largura]}`}
+        className={`anim-modal relative flex max-h-[90vh] w-full flex-col overflow-hidden rounded-t-lg border border-border bg-card pb-[env(safe-area-inset-bottom)] md:m-4 md:rounded-lg md:pb-0 ${LARGURAS[largura]}`}
       >
         <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-4">
           <h2 className="text-lg text-primary">{titulo}</h2>

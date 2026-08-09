@@ -51,9 +51,9 @@ export function PainelCliente({ clienteId, onFechar, onAbrirPedido }: PainelClie
         type="button"
         aria-label="Fechar"
         onClick={onFechar}
-        className="absolute inset-0 hidden bg-black/60 md:block"
+        className="anim-fundo absolute inset-0 hidden bg-black/60 md:block"
       />
-      <div className="absolute inset-y-0 right-0 flex w-full flex-col overflow-y-auto border-l border-border bg-page md:w-[440px] md:bg-card">
+      <div className="anim-painel absolute inset-y-0 right-0 flex w-full flex-col overflow-y-auto border-l border-border bg-page md:w-[440px] md:bg-card">
         <div className="flex shrink-0 items-center gap-3 border-b border-border px-4 py-4 md:px-5">
           <button
             type="button"

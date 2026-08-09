@@ -32,7 +32,122 @@
   --yellow-attention: #f0b23d;
   --yellow-attention-tint: rgba(240, 178, 61, 0.12);
 
+  /* Vocabulário de movimento, observado no abacatepay.com: uma curva só
+     para tudo, e três durações conforme o peso do que se move. O que
+     NÃO foi copiado de lá, de propósito: 'transition: all' (anti-padrão
+     — anima propriedade que ninguém pediu), os borrões pulsantes de
+     3–5s, a esteira de logos e o desenho de seta de 4s. Aquilo é
+     landing page de marketing; isto é ferramenta de trabalho aberta
+     dezenas de vezes por dia. */
+  --curva: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-rapido: 150ms; /* cor, borda, hover */
+  --t-medio: 200ms; /* transform, resposta de toque */
+  --t-entrada: 300ms; /* painel, modal, toast entrando */
+
   color-scheme: dark;
+}
+
+/* Quem pediu menos movimento recebe o estado final na hora, sem
+   percurso. Vale para tudo abaixo, sem exceção. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-rapido: 1ms;
+    --t-medio: 1ms;
+    --t-entrada: 1ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Entradas. Só opacity e transform — as duas propriedades que o
+   compositor resolve sem recalcular layout. */
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes deslizar-da-direita {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+
+@keyframes deslizar-de-baixo {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+@keyframes escurecer {
+  from {
+    opacity: 0;
+  }
+}
+
+.anim-surgir {
+  animation: surgir var(--t-entrada) var(--curva);
+}
+.anim-painel-direita {
+  animation: deslizar-da-direita var(--t-entrada) var(--curva);
+}
+.anim-painel-baixo {
+  animation: deslizar-de-baixo var(--t-entrada) var(--curva);
+}
+.anim-fundo {
+  animation: escurecer var(--t-entrada) var(--curva);
+}
+
+/* Modal: no celular ele encosta na base da tela, então nasce de baixo.
+   No desktop está centralizado e não vem de lugar nenhum — só surge. */
+.anim-modal {
+  animation: deslizar-de-baixo var(--t-entrada) var(--curva);
+}
+@media (min-width: 768px) {
+  .anim-modal {
+    animation: surgir var(--t-entrada) var(--curva);
+  }
+}
+
+/* Toast: o translateX(-50%) que centraliza precisa estar em todos os
+   quadros, porque a animação assume o controle do transform. O estado
+   final também fica declarado, senão o elemento volta ao transform
+   original quando a animação termina e o toast salta para o lado. */
+@keyframes toast-surgir {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+.anim-toast {
+  transform: translateX(-50%);
+  animation: toast-surgir var(--t-entrada) var(--curva);
+}
+
+/* Painel lateral: consistência espacial. No desktop ele vive na borda
+   direita, então entra de lá; no celular ocupa a tela inteira vindo de
+   baixo, como qualquer navegação para dentro. O movimento diz de onde a
+   coisa veio — é a única razão de ele existir aqui. */
+.anim-painel {
+  animation: deslizar-de-baixo var(--t-entrada) var(--curva);
+}
+@media (min-width: 768px) {
+  .anim-painel {
+    animation: deslizar-da-direita var(--t-entrada) var(--curva);
+  }
 }
 
 * {
@@ -66,6 +181,27 @@ a,
 label,
 summary {
   touch-action: manipulation;
+}
+
+/* Transição de cor no que é clicável. As propriedades vão listadas uma
+   a uma: 'transition: all' (que o abacatepay.com usa em 86 elementos)
+   anima também o que você não pediu — largura, altura, sombra — e cobra
+   caro por isso. */
+button,
+a,
+[role="button"] {
+  transition:
+    background-color var(--t-rapido) var(--curva),
+    border-color var(--t-rapido) var(--curva),
+    color var(--t-rapido) var(--curva),
+    opacity var(--t-rapido) var(--curva);
+}
+
+/* Resposta ao toque: some no reduced-motion junto com o resto. */
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active {
+  transform: scale(0.985);
+  transition: transform var(--t-medio) var(--curva);
 }
 
 /* Dígitos de mesma largura onde números são comparados entre linhas —
