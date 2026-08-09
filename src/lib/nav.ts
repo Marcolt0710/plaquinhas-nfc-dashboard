@@ -44,19 +44,18 @@ export const MOBILE_MAIS_ITEMS = NAV_ITEMS.filter(
 
 export interface TelaConfig {
   titulo: string;
-  acaoPrimaria: { rotulo: string } | null;
 }
 
-// Título de topo e rótulo do botão de ação primária por tela.
-// A ação em si (onClick/rota do formulário) é ligada módulo a módulo,
-// nas fases seguintes — aqui só a casca.
+// Título de topo por rota. O botão de ação primária da Topbar é
+// registrado por cada página via usePrimaryAction (src/lib/usePrimaryAction.ts),
+// porque só a página sabe o que "Novo pedido" deve de fato abrir.
 export const TELAS: Record<string, TelaConfig> = {
-  "/": { titulo: "Início", acaoPrimaria: null },
-  "/prospeccao": { titulo: "Prospecção", acaoPrimaria: { rotulo: "Novo lead" } },
-  "/clientes": { titulo: "Clientes", acaoPrimaria: { rotulo: "Novo cliente" } },
-  "/pedidos": { titulo: "Pedidos", acaoPrimaria: { rotulo: "Novo pedido" } },
-  "/etiquetas": { titulo: "Etiquetas NFC", acaoPrimaria: { rotulo: "Gravar etiqueta" } },
-  "/estoque": { titulo: "Estoque", acaoPrimaria: { rotulo: "Nova entrada" } },
-  "/financeiro": { titulo: "Financeiro", acaoPrimaria: null },
-  "/configuracoes": { titulo: "Configurações", acaoPrimaria: null },
+  "/": { titulo: "Início" },
+  "/prospeccao": { titulo: "Prospecção" },
+  "/clientes": { titulo: "Clientes" },
+  "/pedidos": { titulo: "Pedidos" },
+  "/etiquetas": { titulo: "Etiquetas NFC" },
+  "/estoque": { titulo: "Estoque" },
+  "/financeiro": { titulo: "Financeiro" },
+  "/configuracoes": { titulo: "Configurações" },
 };
