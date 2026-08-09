@@ -200,6 +200,7 @@ export interface EtiquetaNFC {
   resultadoTeste: ResultadoTeste;
   aparelhoTeste: string | null;
   dataTeste: ISODateString | null;
+  motivoDefeito: string | null;
   historicoRegravacoes: RegravacaoEtiqueta[];
   criadoEm: ISODateString;
 }
