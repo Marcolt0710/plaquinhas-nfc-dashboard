@@ -31,6 +31,7 @@ export function Topbar() {
           <button
             type="button"
             onClick={acaoPrimaria.onClick}
+            aria-label={acaoPrimaria.rotulo}
             className="flex shrink-0 items-center gap-1.5 rounded-md bg-accent px-3.5 py-2 text-sm font-medium text-accent-ink hover:bg-accent-strong md:px-4 md:py-2.5 md:text-base"
           >
             <Plus size={16} strokeWidth={2} />
