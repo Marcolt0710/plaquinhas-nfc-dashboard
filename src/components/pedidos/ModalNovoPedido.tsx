@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Modal } from "../Modal";
 import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import { formatBRL } from "../../lib/format";
 
 interface ModalNovoPedidoProps {
@@ -47,6 +48,7 @@ export function ModalNovoPedido({
       dataVenda: new Date(dataVenda).toISOString(),
       observacoes: observacoes.trim(),
     });
+    mostrarToast("Pedido salvo.");
     onCriado(id);
   }
 

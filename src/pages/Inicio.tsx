@@ -47,6 +47,7 @@ export default function Inicio() {
       lista.push({
         chave: "atraso",
         icone: "atraso",
+        severidade: "alerta",
         rota: "/pedidos",
         texto:
           pedidosAtrasados.length === 1
@@ -60,6 +61,7 @@ export default function Inicio() {
       lista.push({
         chave: "estoque",
         icone: "estoque",
+        severidade: "atencao",
         rota: "/estoque",
         texto:
           itensBaixos.length === 1
@@ -75,6 +77,7 @@ export default function Inicio() {
       lista.push({
         chave: "retorno30",
         icone: "retorno",
+        severidade: "atencao",
         rota: "/pedidos",
         texto:
           retornos30.length === 1
@@ -134,13 +137,13 @@ export default function Inicio() {
         <CartaoNumeroGrande
           rotulo="Faturamento do mês"
           valor={formatBRL(resumoMesAtual.faturamento)}
-          tom="accent"
+          tom={resumoMesAtual.faturamento > 0 ? "accent" : "primary"}
         />
         <CartaoNumeroGrande
           rotulo="Lucro do mês"
           valor={formatBRL(resumoMesAtual.lucro)}
           nota={`margem de ${resumoMesAtual.margem.toFixed(1).replace(".", ",")}%`}
-          tom="accent"
+          tom={resumoMesAtual.lucro > 0 ? "accent" : resumoMesAtual.lucro < 0 ? "alert" : "primary"}
         />
       </div>
 

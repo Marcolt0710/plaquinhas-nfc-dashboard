@@ -11,6 +11,8 @@ import { NivelBarra } from "../components/estoque/NivelBarra";
 import { ModalNovoItem } from "../components/estoque/ModalNovoItem";
 import { ModalMovimentoEstoque } from "../components/estoque/ModalMovimentoEstoque";
 import { PainelItemEstoque } from "../components/estoque/PainelItemEstoque";
+import { BotaoExportarCsv } from "../components/BotaoExportarCsv";
+import { exportarCsv } from "../lib/csv";
 
 export default function Estoque() {
   const navigate = useNavigate();
@@ -27,6 +29,22 @@ export default function Estoque() {
 
   const etiquetasEmEstoque = etiquetas.filter((e) => e.situacao === "em_estoque").length;
   const etiquetaAbaixoDoMinimo = etiquetasEmEstoque < 10;
+
+  function exportar() {
+    exportarCsv(
+      "estoque",
+      itensEstoque.map((item) => ({
+        Nome: item.nome,
+        Tipo: TIPOS_ITEM_ESTOQUE.find((t) => t.value === item.tipo)?.label ?? item.tipo,
+        "Quantidade atual": item.quantidadeAtual,
+        Unidade: item.unidade,
+        "Quantidade mínima": item.quantidadeMinima,
+        "Custo unitário": formatBRL(item.custoUnitario),
+        Fornecedor: item.fornecedor,
+        "Prazo de reposição (dias)": item.prazoReposicaoDias,
+      })),
+    );
+  }
 
   const modais = (
     <>
@@ -100,6 +118,10 @@ export default function Estoque() {
             <TriangleAlert size={16} /> Abaixo do mínimo de 10
           </span>
         )}
+      </div>
+
+      <div className="flex justify-end">
+        <BotaoExportarCsv onExportar={exportar} />
       </div>
 
       <div className="flex flex-col gap-3">

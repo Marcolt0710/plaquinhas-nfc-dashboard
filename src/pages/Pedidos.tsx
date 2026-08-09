@@ -9,6 +9,11 @@ import { PainelPedido } from "../components/pedidos/PainelPedido";
 import { ModalNovoPedido } from "../components/pedidos/ModalNovoPedido";
 import { ModalNovoCliente } from "../components/clientes/ModalNovoCliente";
 import { PainelCliente } from "../components/clientes/PainelCliente";
+import { BotaoExportarCsv } from "../components/BotaoExportarCsv";
+import { exportarCsv } from "../lib/csv";
+import { custoTotalPedido, lucroPedido } from "../components/pedidos/pedidoHelpers";
+import { formatBRL, formatDate } from "../lib/format";
+import { ETAPAS_PEDIDO } from "../types";
 
 function visaoPadrao(): "kanban" | "tabela" {
   if (typeof window === "undefined") return "kanban";
@@ -17,6 +22,7 @@ function visaoPadrao(): "kanban" | "tabela" {
 
 export default function Pedidos() {
   const pedidos = useAppStore((state) => state.pedidos);
+  const clientes = useAppStore((state) => state.clientes);
   const [visao, setVisao] = useState<"kanban" | "tabela">(visaoPadrao);
   const [modalNovoPedidoAberto, setModalNovoPedidoAberto] = useState(false);
   const [modalNovoClienteAberto, setModalNovoClienteAberto] = useState(false);
@@ -28,6 +34,29 @@ export default function Pedidos() {
   function abrirClienteAPartirDoPedido(clienteId: string) {
     setPedidoSelecionadoId(null);
     setClienteSelecionadoId(clienteId);
+  }
+
+  const labelEtapa = Object.fromEntries(ETAPAS_PEDIDO.map((e) => [e.value, e.label])) as Record<
+    string,
+    string
+  >;
+
+  function exportar() {
+    exportarCsv(
+      "pedidos",
+      pedidos.map((pedido) => ({
+        Código: pedido.codigo,
+        Cliente: clientes.find((c) => c.id === pedido.clienteId)?.nomeEstabelecimento ?? "",
+        Placas: pedido.numeroPlacas,
+        Valor: formatBRL(pedido.valorCobrado),
+        Custo: formatBRL(custoTotalPedido(pedido)),
+        Lucro: formatBRL(lucroPedido(pedido)),
+        "Data da venda": formatDate(pedido.dataVenda),
+        "Entrega prometida": formatDate(pedido.dataPrometidaEntrega),
+        Etapa: labelEtapa[pedido.etapa] ?? pedido.etapa,
+        Pago: pedido.pago ? "Sim" : "Não",
+      })),
+    );
   }
 
   const modais = (
@@ -114,6 +143,7 @@ export default function Pedidos() {
         >
           <List size={16} /> Tabela
         </button>
+        <BotaoExportarCsv onExportar={exportar} className="ml-auto" />
       </div>
 
       {visao === "kanban" ? (

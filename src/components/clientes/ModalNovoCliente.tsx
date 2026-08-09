@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "../Modal";
 import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 
 interface ModalNovoClienteProps {
   onFechar: () => void;
@@ -35,6 +36,7 @@ export function ModalNovoCliente({ onFechar, onCriado }: ModalNovoClienteProps) 
       leadOrigemId: null,
       observacoes: observacoes.trim(),
     });
+    mostrarToast("Cliente salvo.");
     onCriado(id);
   }
 

@@ -9,6 +9,7 @@ import {
   classesLabel,
 } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import type { ResultadoTeste } from "../../types";
 import { TONE_SITUACAO_ETIQUETA, LABEL_SITUACAO_ETIQUETA, etiquetaDisponivelParaGravar } from "./etiquetaHelpers";
 
@@ -60,12 +61,14 @@ export function FluxoGravacao({ onFechar }: FluxoGravacaoProps) {
       gravadoPor: gravadoPor.trim(),
       motivoRegravacao: regravando ? motivoRegravacao.trim() : undefined,
     });
+    mostrarToast("Etiqueta gravada.");
     setPasso("teste");
   }
 
   function confirmarTeste() {
     if (!etiquetaId || !aparelho.trim()) return;
     registrarTesteEtiqueta(etiquetaId, { resultado, aparelho: aparelho.trim() });
+    mostrarToast("Teste registrado.");
     setPasso("concluido");
   }
 

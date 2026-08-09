@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "../Modal";
 import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import type { Lead, SituacaoLead } from "../../types";
 import { SITUACOES_LEAD } from "../../types";
 import { agoraISO } from "../../lib/date";
@@ -54,6 +55,9 @@ export function ModalRegistrarVisita({ lead, onFechar, onRegistrado }: ModalRegi
         indicadoPorClienteId: null,
         observacoes: "",
       });
+      mostrarToast("Visita registrada e cliente cadastrado.");
+    } else {
+      mostrarToast("Visita registrada.");
     }
 
     onRegistrado();

@@ -16,6 +16,8 @@ import {
 } from "../components/prospeccao/leadHelpers";
 import { ModalNovoLead } from "../components/prospeccao/ModalNovoLead";
 import { PainelLead } from "../components/prospeccao/PainelLead";
+import { BotaoExportarCsv } from "../components/BotaoExportarCsv";
+import { exportarCsv } from "../lib/csv";
 
 export default function Prospeccao() {
   const leads = useAppStore((state) => state.leads);
@@ -42,6 +44,25 @@ export default function Prospeccao() {
       return true;
     });
   }, [leads, busca, filtroSituacao, filtroCategoria, filtroRua]);
+
+  function exportar() {
+    exportarCsv(
+      "leads",
+      leadsFiltrados.map((lead) => ({
+        Estabelecimento: lead.nomeEstabelecimento,
+        Rua: lead.rua,
+        Endereço: lead.endereco,
+        Categoria: CATEGORIAS_LEAD.find((c) => c.value === lead.categoria)?.label ?? lead.categoria,
+        "Nota Google": lead.notaGoogle ?? "",
+        Avaliações: lead.numeroAvaliacoes ?? "",
+        Situação: LABEL_SITUACAO[lead.situacao],
+        "Data da visita": formatDate(lead.dataVisita),
+        "Atendido por": lead.atendidoPor ?? "",
+        "Data de retorno": formatDate(lead.dataRetorno),
+        Observações: lead.observacoes,
+      })),
+    );
+  }
 
   const portasVisitadas = leads.filter((l) => l.situacao !== "a_visitar").length;
   const vendidos = leads.filter((l) => l.situacao === "vendido").length;
@@ -97,7 +118,9 @@ export default function Prospeccao() {
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs uppercase tracking-wide text-secondary">Taxa de conversão</p>
-          <p className="mt-1 font-mono text-2xl text-accent">{taxaConversao}%</p>
+          <p className={`mt-1 font-mono text-2xl ${taxaConversao > 0 ? "text-accent" : "text-primary"}`}>
+            {taxaConversao}%
+          </p>
           <p className="mt-0.5 text-xs text-secondary">vendidos sobre portas visitadas</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
@@ -166,6 +189,7 @@ export default function Prospeccao() {
           {agruparPorRua ? <MapPin size={16} /> : <LayoutList size={16} />}
           Agrupar por rua
         </button>
+        <BotaoExportarCsv onExportar={exportar} className="sm:ml-auto" />
       </div>
 
       {leadsFiltrados.length === 0 ? (
@@ -173,6 +197,13 @@ export default function Prospeccao() {
           icon={Footprints}
           titulo="Nenhum lead encontrado"
           descricao="Ajuste a busca ou os filtros para ver leads do roteiro."
+          acaoRotulo="Limpar filtros"
+          onAcao={() => {
+            setBusca("");
+            setFiltroSituacao("todas");
+            setFiltroCategoria("todas");
+            setFiltroRua("todas");
+          }}
         />
       ) : agruparPorRua && grupos ? (
         <div className="flex flex-col gap-6">

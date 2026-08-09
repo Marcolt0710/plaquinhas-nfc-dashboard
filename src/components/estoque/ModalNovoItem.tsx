@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "../Modal";
 import { classesBotaoPrimario, classesCampo, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import { TIPOS_ITEM_ESTOQUE, type TipoItemEstoque } from "../../types";
 
 interface ModalNovoItemProps {
@@ -39,6 +40,7 @@ export function ModalNovoItem({ onFechar, onCriado }: ModalNovoItemProps) {
       fornecedor: fornecedor.trim(),
       prazoReposicaoDias: Number(prazoReposicaoDias) || 0,
     });
+    mostrarToast("Item salvo.");
     onCriado(id);
   }
 

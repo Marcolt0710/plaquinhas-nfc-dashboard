@@ -22,16 +22,22 @@ export function Topbar() {
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-secondary"
           />
           <input
+            id="busca-global"
             type="search"
             placeholder="Buscar clientes, pedidos, etiquetas..."
-            className="w-full rounded-sm border border-border bg-input py-2 pl-9 pr-3 text-sm text-primary placeholder:text-secondary focus:border-accent focus:outline-none"
+            title="Atalho: tecle / para focar aqui de qualquer tela"
+            className="w-full rounded-sm border border-border bg-input py-2 pl-9 pr-9 text-sm text-primary placeholder:text-secondary focus:border-accent focus:outline-none"
           />
+          <kbd className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-secondary sm:inline-block">
+            /
+          </kbd>
         </div>
         {acaoPrimaria ? (
           <button
             type="button"
             onClick={acaoPrimaria.onClick}
             aria-label={acaoPrimaria.rotulo}
+            title={`Atalho: tecle n`}
             className="flex shrink-0 items-center gap-1.5 rounded-md bg-accent px-3.5 py-2 text-sm font-medium text-accent-ink hover:bg-accent-strong md:px-4 md:py-2.5 md:text-base"
           >
             <Plus size={16} strokeWidth={2} />

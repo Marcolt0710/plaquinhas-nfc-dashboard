@@ -105,10 +105,10 @@ export function PainelCliente({ clienteId, onFechar, onAbrirPedido }: PainelClie
               <p className="text-xs uppercase tracking-wide text-secondary">
                 Link encurtado (gravado na etiqueta)
               </p>
-              <p className="mt-1 flex items-center gap-1.5 break-all font-mono text-xs text-accent">
+              <p className="mt-1 flex items-center gap-1.5 break-all font-mono text-xs text-primary">
                 {cliente.linkEncurtado ? (
                   <>
-                    <LinkIcon size={12} className="shrink-0" /> {cliente.linkEncurtado}
+                    <LinkIcon size={12} className="shrink-0 text-secondary" /> {cliente.linkEncurtado}
                   </>
                 ) : (
                   <span className="text-secondary">—</span>

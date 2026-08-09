@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "../Modal";
 import { classesBotaoPrimario, classesCampo, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import type { ItemEstoque } from "../../types";
 
 interface ModalMovimentoEstoqueProps {
@@ -25,8 +26,10 @@ export function ModalMovimentoEstoque({ item, tipo, onFechar }: ModalMovimentoEs
     const qtd = Number(quantidade);
     if (tipo === "entrada") {
       registrarEntradaEstoque(item.id, qtd, motivo.trim() || "Compra do fornecedor");
+      mostrarToast("Entrada registrada.");
     } else {
       registrarPerdaEstoque(item.id, qtd, motivo.trim());
+      mostrarToast("Perda registrada.");
     }
     onFechar();
   }

@@ -3,6 +3,7 @@ import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } f
 import { TriangleAlert } from "lucide-react";
 import { ETAPAS_PEDIDO, type EtapaPedido } from "../../types";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import { ColunaKanban } from "./ColunaKanban";
 
 interface KanbanPedidosProps {
@@ -28,7 +29,13 @@ export function KanbanPedidos({ onAbrirPedido }: KanbanPedidosProps) {
     if (!pedido || pedido.etapa === novaEtapa) return;
 
     const resultado = avancarEtapaPedido(pedido.id, novaEtapa);
-    setErro(resultado.ok ? null : resultado.erro ?? "Não foi possível mover o pedido.");
+    if (resultado.ok) {
+      setErro(null);
+      const rotuloEtapa = ETAPAS_PEDIDO.find((e) => e.value === novaEtapa)?.label ?? novaEtapa;
+      mostrarToast(`Pedido movido para ${rotuloEtapa}.`);
+    } else {
+      setErro(resultado.erro ?? "Não foi possível mover o pedido.");
+    }
   }
 
   return (

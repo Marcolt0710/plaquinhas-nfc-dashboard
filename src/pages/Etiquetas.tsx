@@ -17,6 +17,9 @@ import {
 } from "../components/etiquetas/etiquetaHelpers";
 import { FluxoGravacao } from "../components/etiquetas/FluxoGravacao";
 import { PainelEtiqueta } from "../components/etiquetas/PainelEtiqueta";
+import { BotaoExportarCsv } from "../components/BotaoExportarCsv";
+import { exportarCsv } from "../lib/csv";
+import { mostrarToast } from "../store/useUiStore";
 
 export default function Etiquetas() {
   const navigate = useNavigate();
@@ -53,10 +56,32 @@ export default function Etiquetas() {
     return { codigo: pedido.codigo, nome: cliente?.nomeEstabelecimento ?? "cliente não encontrado" };
   }
 
+  function exportar() {
+    exportarCsv(
+      "etiquetas-nfc",
+      etiquetasFiltradas.map((etiqueta) => {
+        const vinculo = nomeClienteDaEtiqueta(etiqueta.pedidoId);
+        return {
+          Código: etiqueta.codigoInterno,
+          UID: etiqueta.uid ?? "",
+          Situação: LABEL_SITUACAO_ETIQUETA[etiqueta.situacao],
+          Pedido: vinculo?.codigo ?? "",
+          Cliente: vinculo?.nome ?? "",
+          "Link gravado": etiqueta.linkGravado ?? "",
+          "Data de gravação": formatDate(etiqueta.dataGravacao),
+          "Gravado por": etiqueta.gravadoPor ?? "",
+          "Resultado do teste": LABEL_RESULTADO_TESTE[etiqueta.resultadoTeste],
+          "Aparelho do teste": etiqueta.aparelhoTeste ?? "",
+        };
+      }),
+    );
+  }
+
   function confirmarReposicao() {
     const quantidade = Number(quantidadeReposicao);
     if (!Number.isFinite(quantidade) || quantidade <= 0) return;
     adicionarEtiquetasEmEstoque(Math.floor(quantidade));
+    mostrarToast(`${Math.floor(quantidade)} etiqueta${Math.floor(quantidade) > 1 ? "s" : ""} adicionada${Math.floor(quantidade) > 1 ? "s" : ""} ao estoque.`);
     setQuantidadeReposicao("");
   }
 
@@ -145,6 +170,7 @@ export default function Etiquetas() {
           <option value="entregue">Entregue</option>
           <option value="com_defeito">Com defeito</option>
         </select>
+        <BotaoExportarCsv onExportar={exportar} className="sm:ml-auto" />
       </div>
 
       {etiquetasFiltradas.length === 0 ? (
@@ -152,6 +178,11 @@ export default function Etiquetas() {
           icon={Search}
           titulo="Nenhuma etiqueta encontrada"
           descricao="Ajuste a busca por link ou o filtro de situação."
+          acaoRotulo="Limpar filtros"
+          onAcao={() => {
+            setBuscaLink("");
+            setFiltroSituacao("todas");
+          }}
         />
       ) : (
         <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card">

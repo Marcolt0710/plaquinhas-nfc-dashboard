@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Modal } from "../Modal";
 import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import { CATEGORIAS_LEAD, type CategoriaLead } from "../../types";
 
 interface ModalNovoLeadProps {
@@ -44,6 +45,7 @@ export function ModalNovoLead({ onFechar, onCriado }: ModalNovoLeadProps) {
       dataRetorno: null,
       observacoes: observacoes.trim(),
     });
+    mostrarToast("Lead salvo.");
     onCriado(id);
   }
 

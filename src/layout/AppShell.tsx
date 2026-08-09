@@ -2,11 +2,16 @@ import { Outlet } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { BottomNav } from "./BottomNav";
+import { Toast } from "../components/Toast";
+import { useAtalhosTeclado } from "../lib/useAtalhosTeclado";
 
 export function AppShell() {
+  useAtalhosTeclado();
+
   return (
     <div className="flex min-h-screen bg-page">
       <Sidebar />
+      <Toast />
       {/*
         min-w-0 é necessário aqui: sem isso, um filho com min-width fixo em
         algum ponto da árvore (ex. tabela com min-w-[720px] dentro de

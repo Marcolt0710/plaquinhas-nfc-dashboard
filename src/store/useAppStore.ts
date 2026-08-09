@@ -292,7 +292,7 @@ export const useAppStore = create<AppState>()(
             return {
               ok: false,
               erro:
-                "Não é possível marcar como entregue: existe etiqueta sem teste aprovado neste pedido.",
+                "Este pedido tem etiqueta sem teste aprovado. Registre o teste dela em Etiquetas NFC antes de marcar como entregue.",
             };
           }
         }

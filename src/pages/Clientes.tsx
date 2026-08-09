@@ -8,6 +8,8 @@ import { formatDate } from "../lib/format";
 import { ModalNovoCliente } from "../components/clientes/ModalNovoCliente";
 import { PainelCliente } from "../components/clientes/PainelCliente";
 import { PainelPedido } from "../components/pedidos/PainelPedido";
+import { BotaoExportarCsv } from "../components/BotaoExportarCsv";
+import { exportarCsv } from "../lib/csv";
 
 export default function Clientes() {
   const clientes = useAppStore((state) => state.clientes);
@@ -27,6 +29,22 @@ export default function Clientes() {
 
   function contarPedidos(clienteId: string) {
     return pedidos.filter((p) => p.clienteId === clienteId).length;
+  }
+
+  function exportar() {
+    exportarCsv(
+      "clientes",
+      clientesFiltrados.map((cliente) => ({
+        Estabelecimento: cliente.nomeEstabelecimento,
+        Responsável: cliente.nomeResponsavel,
+        Telefone: cliente.telefoneResponsavel,
+        Endereço: cliente.endereco,
+        "Link de avaliação": cliente.linkAvaliacaoGoogle,
+        "Link encurtado": cliente.linkEncurtado,
+        "Primeiro pedido": formatDate(cliente.dataPrimeiroPedido),
+        Pedidos: contarPedidos(cliente.id),
+      })),
+    );
   }
 
   const modais = (
@@ -73,18 +91,23 @@ export default function Clientes() {
 
   return (
     <div className="flex flex-col gap-5">
-      <input
-        className={`${classesCampo} sm:max-w-xs`}
-        placeholder="Buscar por nome do estabelecimento"
-        value={busca}
-        onChange={(e) => setBusca(e.target.value)}
-      />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <input
+          className={`${classesCampo} sm:max-w-xs`}
+          placeholder="Buscar por nome do estabelecimento"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+        />
+        <BotaoExportarCsv onExportar={exportar} className="sm:ml-auto" />
+      </div>
 
       {clientesFiltrados.length === 0 ? (
         <EmptyState
           icon={Users}
           titulo="Nenhum cliente encontrado"
           descricao="Ajuste a busca para ver outros clientes."
+          acaoRotulo="Limpar busca"
+          onAcao={() => setBusca("")}
         />
       ) : (
         <div className="overflow-x-auto rounded-lg border border-border bg-card">

@@ -122,9 +122,9 @@ export default function Configuracoes() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 rounded-md border border-accent/30 bg-accent-tint px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 rounded-md border border-border-strong bg-card-hover px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-sm text-secondary">Custo total por placa (calculado)</span>
-          <span className="font-mono text-2xl text-accent">{formatBRL(custoTotalPorPlaca(custosForm))}</span>
+          <span className="font-mono text-2xl text-primary">{formatBRL(custoTotalPorPlaca(custosForm))}</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -355,6 +355,35 @@ export default function Configuracoes() {
           onFechar={() => setModalPacoteAberto(null)}
         />
       )}
+
+      <div className="rounded-lg border border-border bg-card p-5">
+        <h2 className="text-lg text-primary">Atalhos de teclado</h2>
+        <p className="mt-1 text-sm text-secondary">
+          Funcionam em qualquer tela, exceto enquanto você estiver digitando num campo.
+        </p>
+        <dl className="mt-3 flex flex-col gap-2 text-sm">
+          <div className="flex items-center gap-3">
+            <kbd className="rounded border border-border bg-card-hover px-2 py-1 font-mono text-xs text-primary">
+              /
+            </kbd>
+            <dd className="text-secondary">Foca a busca da barra superior</dd>
+          </div>
+          <div className="flex items-center gap-3">
+            <kbd className="rounded border border-border bg-card-hover px-2 py-1 font-mono text-xs text-primary">
+              n
+            </kbd>
+            <dd className="text-secondary">
+              Dispara a ação principal da tela atual (o botão verde da barra superior)
+            </dd>
+          </div>
+          <div className="flex items-center gap-3">
+            <kbd className="rounded border border-border bg-card-hover px-2 py-1 font-mono text-xs text-primary">
+              Esc
+            </kbd>
+            <dd className="text-secondary">Fecha o modal ou painel aberto</dd>
+          </div>
+        </dl>
+      </div>
     </div>
   );
 }

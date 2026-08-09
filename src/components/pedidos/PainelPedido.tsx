@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, Check, Trash2, TriangleAlert } from "lucide-react";
 import { useAppStore } from "../../store/useAppStore";
+import { mostrarToast } from "../../store/useUiStore";
 import { Badge } from "../Badge";
 import { classesBotaoPerigo, classesBotaoPrimario } from "../formClasses";
 import { ETAPAS_PEDIDO } from "../../types";
@@ -46,7 +47,12 @@ export function PainelPedido({ pedidoId, onFechar, onAbrirCliente }: PainelPedid
   function aoAvancar() {
     if (!proximaEtapa || !pedido) return;
     const resultado = avancarEtapaPedido(pedido.id, proximaEtapa.value);
-    setErro(resultado.ok ? null : resultado.erro ?? "Não foi possível avançar a etapa.");
+    if (resultado.ok) {
+      setErro(null);
+      mostrarToast(`Pedido movido para ${proximaEtapa.label}.`);
+    } else {
+      setErro(resultado.erro ?? "Não foi possível avançar a etapa.");
+    }
   }
 
   return (
@@ -115,7 +121,9 @@ export function PainelPedido({ pedidoId, onFechar, onAbrirCliente }: PainelPedid
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-secondary">Lucro</p>
-              <p className="mt-1 font-mono text-md text-accent">{formatBRL(lucroPedido(pedido))}</p>
+              <p className={`mt-1 font-mono text-md ${lucroPedido(pedido) >= 0 ? "text-accent" : "text-alert"}`}>
+                {formatBRL(lucroPedido(pedido))}
+              </p>
               <p className="text-xs text-secondary">{margemPedido(pedido).toFixed(0)}% de margem</p>
             </div>
           </div>
