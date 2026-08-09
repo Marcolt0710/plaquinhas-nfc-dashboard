@@ -22,4 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.claude/
+# Arquivos de sessão do Claude Code ficam de fora, mas as skills do
+# projeto são versionadas junto — valem para quem clonar o repositório.
+.claude/*
+!.claude/skills/
