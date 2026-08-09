@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Modal } from "../Modal";
-import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
+import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesSelect, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
 import { mostrarToast } from "../../store/useUiStore";
 import { CATEGORIAS_LEAD, type CategoriaLead } from "../../types";
@@ -104,7 +104,7 @@ export function ModalNovoLead({ onFechar, onCriado }: ModalNovoLeadProps) {
             </label>
             <select
               id="categoria"
-              className={classesCampo}
+              className={classesSelect}
               value={categoria}
               onChange={(e) => setCategoria(e.target.value as CategoriaLead)}
             >

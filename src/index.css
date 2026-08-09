@@ -57,6 +57,36 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* O app é operado com o polegar, em pé, na rua: sem isso o navegador
+   segura ~300 ms em cada toque esperando um possível duplo-toque de
+   zoom, e a interface inteira parece lenta no celular. */
+button,
+a,
+[role="button"],
+label,
+summary {
+  touch-action: manipulation;
+}
+
+/* Dígitos de mesma largura onde números são comparados entre linhas —
+   valor em reais, quantidade de estoque, contagem. Sem isso as colunas
+   "dançam" ao trocar de linha. A fonte monoespaçada já resolve onde é
+   usada; isto cobre o resto. */
+table,
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 ::selection {
   background: var(--accent-green-tint);
   color: var(--text-primary);

@@ -3,6 +3,7 @@ import type { Pedido } from "../../types";
 import { useAppStore } from "../../store/useAppStore";
 import { formatBRL, formatDate } from "../../lib/format";
 import { pedidoAtrasado, pedidoProximoDoPrazo } from "./pedidoHelpers";
+import { TrilhaEtapas } from "./TrilhaEtapas";
 
 interface CartaoPedidoProps {
   pedido: Pedido;
@@ -48,14 +49,24 @@ export function CartaoPedido({ pedido, onAbrir }: CartaoPedidoProps) {
           />
         )}
       </div>
-      <p className="text-sm text-primary">{cliente?.nomeEstabelecimento ?? "Cliente removido"}</p>
+      <p className="truncate text-sm text-primary">
+        {cliente?.nomeEstabelecimento ?? "Cliente removido"}
+      </p>
       <div className="flex items-center justify-between text-xs text-secondary">
         <span>
           {pedido.numeroPlacas} placa{pedido.numeroPlacas > 1 ? "s" : ""}
         </span>
-        <span className="font-mono text-accent">{formatBRL(pedido.valorCobrado)}</span>
+        {/* Valor em branco, não em verde: o verde precisa continuar
+            raro para significar algo. Num quadro com dez cartões, dez
+            valores verdes não destacam nada. */}
+        <span className="num font-mono text-primary">{formatBRL(pedido.valorCobrado)}</span>
       </div>
-      <span className="text-xs text-secondary">Entrega {formatDate(pedido.dataPrometidaEntrega)}</span>
+      <TrilhaEtapas etapa={pedido.etapa} />
+      <span
+        className={`text-xs ${atrasado ? "text-alert" : proximo ? "text-attention" : "text-secondary"}`}
+      >
+        Entrega {formatDate(pedido.dataPrometidaEntrega)}
+      </span>
     </div>
   );
 }

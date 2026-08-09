@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal } from "../Modal";
-import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
+import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesSelect, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
 import { mostrarToast } from "../../store/useUiStore";
 
@@ -75,6 +75,9 @@ export function ModalNovoCliente({ onFechar, onCriado }: ModalNovoClienteProps) 
             </label>
             <input
               id="cliente-telefone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
               className={`${classesCampo} font-mono`}
               value={telefoneResponsavel}
               onChange={(e) => setTelefoneResponsavel(e.target.value)}
@@ -101,10 +104,14 @@ export function ModalNovoCliente({ onFechar, onCriado }: ModalNovoClienteProps) 
           </label>
           <input
             id="cliente-link-avaliacao"
+            type="url"
+            inputMode="url"
+            spellCheck={false}
+            autoCapitalize="none"
             className={`${classesCampo} font-mono`}
             value={linkAvaliacaoGoogle}
             onChange={(e) => setLinkAvaliacaoGoogle(e.target.value)}
-            placeholder="https://g.page/r/..."
+            placeholder="https://g.page/r/…"
           />
         </div>
 
@@ -114,10 +121,14 @@ export function ModalNovoCliente({ onFechar, onCriado }: ModalNovoClienteProps) 
           </label>
           <input
             id="cliente-link-encurtado"
+            type="url"
+            inputMode="url"
+            spellCheck={false}
+            autoCapitalize="none"
             className={`${classesCampo} font-mono`}
             value={linkEncurtado}
             onChange={(e) => setLinkEncurtado(e.target.value)}
-            placeholder="https://avalia.link/..."
+            placeholder="https://avalia.link/…"
           />
         </div>
 
@@ -128,7 +139,7 @@ export function ModalNovoCliente({ onFechar, onCriado }: ModalNovoClienteProps) 
             </label>
             <select
               id="cliente-indicado-por"
-              className={classesCampo}
+              className={classesSelect}
               value={indicadoPorClienteId}
               onChange={(e) => setIndicadoPorClienteId(e.target.value)}
             >

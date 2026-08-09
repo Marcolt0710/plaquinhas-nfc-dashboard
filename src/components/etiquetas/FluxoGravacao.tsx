@@ -5,7 +5,7 @@ import { Badge } from "../Badge";
 import {
   classesBotaoPrimario,
   classesBotaoSecundario,
-  classesCampo,
+  classesCampo, classesSelect,
   classesLabel,
 } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
@@ -271,7 +271,7 @@ export function FluxoGravacao({ onFechar }: FluxoGravacaoProps) {
           <label>
             <span className={classesLabel}>Resultado do teste</span>
             <select
-              className={classesCampo}
+              className={classesSelect}
               value={resultado}
               onChange={(e) => setResultado(e.target.value as ResultadoTeste)}
             >
@@ -285,7 +285,7 @@ export function FluxoGravacao({ onFechar }: FluxoGravacaoProps) {
               className={classesCampo}
               value={aparelho}
               onChange={(e) => setAparelho(e.target.value)}
-              placeholder="Ex.: iPhone 13, Moto G54..."
+              placeholder="Ex.: iPhone 13, Moto G54…"
             />
           </label>
           <button

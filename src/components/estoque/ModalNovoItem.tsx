@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal } from "../Modal";
-import { classesBotaoPrimario, classesCampo, classesLabel } from "../formClasses";
+import { classesBotaoPrimario, classesCampo, classesSelect, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
 import { mostrarToast } from "../../store/useUiStore";
 import { TIPOS_ITEM_ESTOQUE, type TipoItemEstoque } from "../../types";
@@ -50,7 +50,7 @@ export function ModalNovoItem({ onFechar, onCriado }: ModalNovoItemProps) {
         <label>
           <span className={classesLabel}>Tipo</span>
           <select
-            className={classesCampo}
+            className={classesSelect}
             value={tipo}
             onChange={(e) => {
               const novoTipo = e.target.value as TipoItemEstoque;

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Footprints, LayoutList, MapPin, Star, TriangleAlert } from "lucide-react";
 import { EmptyState } from "../components/EmptyState";
 import { Badge } from "../components/Badge";
-import { classesCampo } from "../components/formClasses";
+import { classesCampo, classesSelect } from "../components/formClasses";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
 import { CATEGORIAS_LEAD, SITUACOES_LEAD, type CategoriaLead, type Lead, type SituacaoLead } from "../types";
@@ -142,7 +142,7 @@ export default function Prospeccao() {
           onChange={(e) => setBusca(e.target.value)}
         />
         <select
-          className={`${classesCampo} sm:w-auto`}
+          className={`${classesSelect} sm:w-auto`}
           value={filtroSituacao}
           onChange={(e) => setFiltroSituacao(e.target.value as SituacaoLead | "todas")}
         >
@@ -154,7 +154,7 @@ export default function Prospeccao() {
           ))}
         </select>
         <select
-          className={`${classesCampo} sm:w-auto`}
+          className={`${classesSelect} sm:w-auto`}
           value={filtroCategoria}
           onChange={(e) => setFiltroCategoria(e.target.value as CategoriaLead | "todas")}
         >
@@ -166,7 +166,7 @@ export default function Prospeccao() {
           ))}
         </select>
         <select
-          className={`${classesCampo} sm:w-auto`}
+          className={`${classesSelect} sm:w-auto`}
           value={filtroRua}
           onChange={(e) => setFiltroRua(e.target.value)}
         >

@@ -14,7 +14,7 @@ export function CartaoIndicador({ rotulo, valor, variacao, nota, children }: Car
   return (
     <div className="rounded-lg border border-border bg-card p-4">
       <p className="text-xs uppercase tracking-wide text-secondary">{rotulo}</p>
-      <p className="mt-1 truncate font-mono text-2xl text-primary">{valor}</p>
+      <p className="num mt-1 truncate font-mono text-2xl text-primary">{valor}</p>
       {variacao ? (
         <p className={`mt-1 text-xs ${variacao.positiva ? "text-accent" : "text-alert"}`}>{variacao.texto}</p>
       ) : nota ? (

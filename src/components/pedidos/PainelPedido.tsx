@@ -5,6 +5,7 @@ import { mostrarToast } from "../../store/useUiStore";
 import { Badge } from "../Badge";
 import { classesBotaoPerigo, classesBotaoPrimario } from "../formClasses";
 import { ETAPAS_PEDIDO } from "../../types";
+import { TrilhaEtapas } from "./TrilhaEtapas";
 import { formatBRL, formatDate } from "../../lib/format";
 import {
   TONE_ETAPA,
@@ -130,17 +131,30 @@ export function PainelPedido({ pedidoId, onFechar, onAbrirCliente }: PainelPedid
 
           <div>
             <p className="mb-2 text-xs uppercase tracking-wide text-secondary">Progresso da produção</p>
+            {/* Resumo antes do detalhe: a trilha responde "quanto falta"
+                num relance; a lista abaixo diz exatamente o quê. */}
+            <div className="mb-3">
+              <TrilhaEtapas etapa={pedido.etapa} comLegenda />
+            </div>
             <ul className="flex flex-col gap-1">
               {ETAPAS_PEDIDO.map((etapa, indice) => {
                 const feito = indice <= indiceAtual;
+                const atual = indice === indiceAtual;
                 return (
                   <li key={etapa.value} className="flex items-center gap-2.5 py-1">
+                    {/* Só a etapa atual usa o verde cheio. Antes todas as
+                        concluídas usavam, e um pedido entregue virava sete
+                        círculos verdes — o destaque deixava de destacar. */}
                     <span
                       className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs ${
-                        feito ? "bg-accent text-accent-ink" : "bg-card-hover text-secondary"
+                        atual
+                          ? "bg-accent text-accent-ink"
+                          : feito
+                            ? "bg-card-hover text-accent"
+                            : "bg-card-hover text-secondary"
                       }`}
                     >
-                      {feito ? <Check size={12} /> : indice + 1}
+                      {feito ? <Check size={12} aria-hidden="true" /> : indice + 1}
                     </span>
                     <span
                       className={`text-sm ${

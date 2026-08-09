@@ -19,14 +19,18 @@ export function Topbar() {
           <Search
             size={16}
             strokeWidth={1.75}
+            aria-hidden="true"
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-secondary"
           />
           <input
             id="busca-global"
             type="search"
-            placeholder="Buscar clientes, pedidos, etiquetas..."
+            aria-label="Buscar clientes, pedidos e etiquetas"
+            placeholder="Buscar clientes, pedidos, etiquetas…"
             title="Atalho: tecle / para focar aqui de qualquer tela"
-            className="w-full rounded-sm border border-border bg-input py-2 pl-9 pr-9 text-sm text-primary placeholder:text-secondary focus:border-accent focus:outline-none"
+            autoComplete="off"
+            spellCheck={false}
+            className="w-full rounded-sm border border-border bg-input py-2 pl-9 pr-9 text-sm text-primary placeholder:text-secondary focus:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-page"
           />
           <kbd className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-secondary sm:inline-block">
             /

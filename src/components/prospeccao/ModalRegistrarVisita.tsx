@@ -199,6 +199,9 @@ export function ModalRegistrarVisita({ lead, onFechar, onRegistrado }: ModalRegi
                     </label>
                     <input
                       id="telefone-responsavel"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
                       className={`${classesCampo} font-mono`}
                       value={telefoneResponsavel}
                       onChange={(e) => setTelefoneResponsavel(e.target.value)}
@@ -212,10 +215,14 @@ export function ModalRegistrarVisita({ lead, onFechar, onRegistrado }: ModalRegi
                   </label>
                   <input
                     id="link-avaliacao"
+                    type="url"
+                    inputMode="url"
+                    spellCheck={false}
+                    autoCapitalize="none"
                     className={`${classesCampo} font-mono`}
                     value={linkAvaliacaoGoogle}
                     onChange={(e) => setLinkAvaliacaoGoogle(e.target.value)}
-                    placeholder="https://g.page/r/..."
+                    placeholder="https://g.page/r/…"
                   />
                 </div>
                 <div>
@@ -224,10 +231,14 @@ export function ModalRegistrarVisita({ lead, onFechar, onRegistrado }: ModalRegi
                   </label>
                   <input
                     id="link-encurtado"
+                    type="url"
+                    inputMode="url"
+                    spellCheck={false}
+                    autoCapitalize="none"
                     className={`${classesCampo} font-mono`}
                     value={linkEncurtado}
                     onChange={(e) => setLinkEncurtado(e.target.value)}
-                    placeholder="https://avalia.link/..."
+                    placeholder="https://avalia.link/…"
                   />
                 </div>
               </div>

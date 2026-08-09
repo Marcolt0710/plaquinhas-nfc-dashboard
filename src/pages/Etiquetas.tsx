@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Nfc, PackagePlus, Search, TriangleAlert } from "lucide-react";
 import { EmptyState } from "../components/EmptyState";
 import { Badge } from "../components/Badge";
-import { classesCampo } from "../components/formClasses";
+import { classesCampo, classesSelect } from "../components/formClasses";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
 import type { SituacaoEtiqueta } from "../types";
@@ -130,7 +130,7 @@ export default function Etiquetas() {
             <input
               type="number"
               min={1}
-              className="w-20 min-w-0 rounded-sm border border-border bg-input px-3 py-2.5 text-base text-primary placeholder:text-secondary focus:border-accent focus:outline-none"
+              className="w-20 min-w-0 rounded-sm border border-border bg-input px-3 py-2.5 text-base text-primary placeholder:text-secondary focus:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               placeholder="Qtd."
               value={quantidadeReposicao}
               onChange={(e) => setQuantidadeReposicao(e.target.value)}
@@ -160,7 +160,7 @@ export default function Etiquetas() {
           />
         </div>
         <select
-          className={`${classesCampo} sm:w-auto`}
+          className={`${classesSelect} sm:w-auto`}
           value={filtroSituacao}
           onChange={(e) => setFiltroSituacao(e.target.value as SituacaoEtiqueta | "todas")}
         >

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Modal } from "../Modal";
-import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesLabel } from "../formClasses";
+import { classesBotaoPrimario, classesBotaoSecundario, classesCampo, classesSelect, classesLabel } from "../formClasses";
 import { useAppStore } from "../../store/useAppStore";
 import { mostrarToast } from "../../store/useUiStore";
 import { formatBRL } from "../../lib/format";
@@ -97,7 +97,7 @@ export function ModalNovoPedido({
           </label>
           <select
             id="pedido-cliente"
-            className={classesCampo}
+            className={classesSelect}
             value={clienteId}
             onChange={(e) => setClienteId(e.target.value)}
           >
@@ -115,7 +115,7 @@ export function ModalNovoPedido({
           </label>
           <select
             id="pedido-pacote"
-            className={classesCampo}
+            className={classesSelect}
             value={pacoteId}
             onChange={(e) => aoTrocarPacote(e.target.value)}
           >
