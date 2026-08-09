@@ -26,3 +26,24 @@ export function faltamMenosDe24h(iso: string | null | undefined): boolean {
   const horas = diferencaEmHoras(iso);
   return horas >= 0 && horas < 24;
 }
+
+/** Chave "AAAA-MM" do mês de uma data — útil para agrupar por mês. */
+export function chaveDoMes(iso: string): string {
+  const data = new Date(iso);
+  return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}`;
+}
+
+export function chaveDoMesAnterior(chaveMes: string): string {
+  const [ano, mes] = chaveMes.split("-").map(Number);
+  const data = new Date(ano, mes - 2, 1);
+  return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}`;
+}
+
+/** Início (00:00) do dia de N semanas atrás, para agrupar séries semanais. */
+export function inicioDaSemana(iso: string): string {
+  const data = new Date(iso);
+  const diaDaSemana = data.getDay();
+  data.setDate(data.getDate() - diaDaSemana);
+  data.setHours(0, 0, 0, 0);
+  return data.toISOString();
+}
