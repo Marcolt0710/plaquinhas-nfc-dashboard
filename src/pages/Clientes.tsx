@@ -4,6 +4,7 @@ import { EmptyState } from "../components/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
 import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
+import { useEstadoNaUrl } from "../lib/useEstadoNaUrl";
 import { classesCampo } from "../components/formClasses";
 import { formatDate } from "../lib/format";
 import { ModalNovoCliente } from "../components/clientes/ModalNovoCliente";
@@ -15,7 +16,7 @@ import { exportarCsv } from "../lib/csv";
 export default function Clientes() {
   const clientes = useAppStore((state) => state.clientes);
   const pedidos = useAppStore((state) => state.pedidos);
-  const [busca, setBusca] = useState("");
+  const [busca, setBusca] = useEstadoNaUrl("q", "");
   const [modalNovoAberto, setModalNovoAberto] = useState(false);
   const [clienteSelecionadoId, setClienteSelecionadoId] = useState<string | null>(null);
   const [pedidoSelecionadoId, setPedidoSelecionadoId] = useState<string | null>(null);

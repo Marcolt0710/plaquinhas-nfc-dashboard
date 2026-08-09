@@ -5,6 +5,7 @@ import { Badge } from "../components/Badge";
 import { classesCampo, classesSelect } from "../components/formClasses";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
+import { useEstadoNaUrl } from "../lib/useEstadoNaUrl";
 import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
 import { CATEGORIAS_LEAD, SITUACOES_LEAD, type CategoriaLead, type Lead, type SituacaoLead } from "../types";
 import { formatDate } from "../lib/format";
@@ -23,11 +24,21 @@ import { exportarCsv } from "../lib/csv";
 export default function Prospeccao() {
   const leads = useAppStore((state) => state.leads);
 
-  const [busca, setBusca] = useState("");
-  const [filtroSituacao, setFiltroSituacao] = useState<SituacaoLead | "todas">("todas");
-  const [filtroCategoria, setFiltroCategoria] = useState<CategoriaLead | "todas">("todas");
-  const [filtroRua, setFiltroRua] = useState<string>("todas");
-  const [agruparPorRua, setAgruparPorRua] = useState(true);
+  // Busca e filtros vivem na URL: a visão sobrevive ao recarregar e
+  // vira link. "Os leads a visitar da R. dos Alecrins" é exatamente o
+  // que um sócio manda para o outro antes de sair para a rua.
+  const [busca, setBusca] = useEstadoNaUrl("q", "");
+  const [filtroSituacao, setFiltroSituacao] = useEstadoNaUrl<SituacaoLead | "todas">(
+    "situacao",
+    "todas",
+  );
+  const [filtroCategoria, setFiltroCategoria] = useEstadoNaUrl<CategoriaLead | "todas">(
+    "categoria",
+    "todas",
+  );
+  const [filtroRua, setFiltroRua] = useEstadoNaUrl("rua", "todas");
+  const [agrupamento, setAgrupamento] = useEstadoNaUrl<"rua" | "lista">("agrupar", "rua");
+  const agruparPorRua = agrupamento === "rua";
   const [modalNovoLeadAberto, setModalNovoLeadAberto] = useState(false);
   const [leadSelecionadoId, setLeadSelecionadoId] = useState<string | null>(null);
 
@@ -183,7 +194,7 @@ export default function Prospeccao() {
         </select>
         <button
           type="button"
-          onClick={() => setAgruparPorRua((v) => !v)}
+          onClick={() => setAgrupamento(agruparPorRua ? "lista" : "rua")}
           className={`flex items-center gap-1.5 rounded-md border px-3 py-2.5 text-sm font-medium ${
             agruparPorRua
               ? "border-accent bg-accent-tint text-accent"

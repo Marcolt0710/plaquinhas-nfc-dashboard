@@ -16,6 +16,12 @@ import type {
   VisitaLead,
 } from "../types";
 import { gerarId, proximoCodigo } from "../lib/id";
+import {
+  mesclarPorId,
+  somarResumos,
+  type ArquivoBackup,
+  type ResumoMesclagem,
+} from "../lib/backup";
 import { agoraISO, somarDias } from "../lib/date";
 import {
   CONFIGURACAO_INICIAL,
@@ -110,6 +116,9 @@ interface AppState {
   addPacote: (dados: Omit<Pacote, "id">) => void;
   updatePacote: (id: string, patch: Partial<Pacote>) => void;
   inativarPacote: (id: string) => void;
+
+  // --- Backup ---------------------------------------------------------------
+  mesclarBackup: (arquivo: ArquivoBackup) => ResumoMesclagem;
 }
 
 function registrarSaida(
@@ -578,6 +587,40 @@ export const useAppStore = create<AppState>()(
             ),
           },
         }));
+      },
+
+      // ------------------------------------------------------------- Backup
+      // Mescla, nunca substitui: importar o backup do sócio não pode
+      // apagar o que foi cadastrado aqui. A configuração fica de fora de
+      // propósito — custo e preço de pacote são idênticos nos dois
+      // aparelhos, e mesclá-los poderia desfazer em silêncio um reajuste
+      // recém-feito.
+      mesclarBackup: (arquivo) => {
+        const estado = get();
+        const leads = mesclarPorId(estado.leads, arquivo.leads);
+        const clientes = mesclarPorId(estado.clientes, arquivo.clientes);
+        const pedidos = mesclarPorId(estado.pedidos, arquivo.pedidos);
+        const etiquetas = mesclarPorId(estado.etiquetas, arquivo.etiquetas);
+        const itensEstoque = mesclarPorId(estado.itensEstoque, arquivo.itensEstoque);
+        const movimentosEstoque = mesclarPorId(estado.movimentosEstoque, arquivo.movimentosEstoque);
+
+        set({
+          leads: leads.resultado,
+          clientes: clientes.resultado,
+          pedidos: pedidos.resultado,
+          etiquetas: etiquetas.resultado,
+          itensEstoque: itensEstoque.resultado,
+          movimentosEstoque: movimentosEstoque.resultado,
+        });
+
+        return somarResumos([
+          leads.resumo,
+          clientes.resumo,
+          pedidos.resumo,
+          etiquetas.resumo,
+          itensEstoque.resumo,
+          movimentosEstoque.resumo,
+        ]);
       },
     }),
     {

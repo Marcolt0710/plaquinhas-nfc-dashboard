@@ -7,6 +7,7 @@ import { classesCampo, classesSelect } from "../components/formClasses";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
 import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
+import { useEstadoNaUrl } from "../lib/useEstadoNaUrl";
 import type { SituacaoEtiqueta } from "../types";
 import { formatDate } from "../lib/format";
 import {
@@ -29,8 +30,13 @@ export default function Etiquetas() {
   const clientes = useAppStore((state) => state.clientes);
   const adicionarEtiquetasEmEstoque = useAppStore((state) => state.adicionarEtiquetasEmEstoque);
 
-  const [buscaLink, setBuscaLink] = useState("");
-  const [filtroSituacao, setFiltroSituacao] = useState<SituacaoEtiqueta | "todas">("todas");
+  // Busca por link e filtro na URL: achar "qual etiqueta aponta para
+  // onde" é consulta de suporte, e consulta de suporte se compartilha.
+  const [buscaLink, setBuscaLink] = useEstadoNaUrl("link", "");
+  const [filtroSituacao, setFiltroSituacao] = useEstadoNaUrl<SituacaoEtiqueta | "todas">(
+    "situacao",
+    "todas",
+  );
   const [fluxoGravacaoAberto, setFluxoGravacaoAberto] = useState(false);
   const [etiquetaSelecionadaId, setEtiquetaSelecionadaId] = useState<string | null>(null);
   const [quantidadeReposicao, setQuantidadeReposicao] = useState("");

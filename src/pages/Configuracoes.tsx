@@ -12,6 +12,7 @@ import {
 } from "../components/formClasses";
 import { formatBRL } from "../lib/format";
 import { ModalPacote } from "../components/configuracoes/ModalPacote";
+import { BackupDados } from "../components/configuracoes/BackupDados";
 import type { CustosUnitarios, Pacote } from "../types";
 
 const CAMPOS_CUSTO: { chave: keyof Omit<CustosUnitarios, "taxaPerdaPercentual">; rotulo: string }[] = [
@@ -341,6 +342,8 @@ export default function Configuracoes() {
           onFechar={() => setModalPacoteAberto(null)}
         />
       )}
+
+      <BackupDados />
 
       <div className="rounded-lg border border-border bg-card p-5">
         <h2 className="text-lg text-primary">Atalhos de teclado</h2>

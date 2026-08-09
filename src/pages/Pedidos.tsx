@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ClipboardList, LayoutGrid, List } from "lucide-react";
 import { EmptyState } from "../components/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
 import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
+import { useEstadoNaUrl } from "../lib/useEstadoNaUrl";
 import { KanbanPedidos } from "../components/pedidos/KanbanPedidos";
 import { TabelaPedidos } from "../components/pedidos/TabelaPedidos";
 import { PainelPedido } from "../components/pedidos/PainelPedido";
@@ -24,7 +25,14 @@ function visaoPadrao(): "kanban" | "tabela" {
 export default function Pedidos() {
   const pedidos = useAppStore((state) => state.pedidos);
   const clientes = useAppStore((state) => state.clientes);
-  const [visao, setVisao] = useState<"kanban" | "tabela">(visaoPadrao);
+
+  // "auto" é o padrão e não aparece na URL: sem escolha explícita, o
+  // quadro abre no desktop e a tabela no celular. Só quando a pessoa
+  // troca é que a preferência entra no link — assim um link mandado do
+  // computador não força o quadro no celular do sócio.
+  const [visaoEscolhida, setVisao] = useEstadoNaUrl<"kanban" | "tabela" | "auto">("visao", "auto");
+  const padraoDoDispositivo = useMemo(visaoPadrao, []);
+  const visao = visaoEscolhida === "auto" ? padraoDoDispositivo : visaoEscolhida;
   const [modalNovoPedidoAberto, setModalNovoPedidoAberto] = useState(false);
   const [modalNovoClienteAberto, setModalNovoClienteAberto] = useState(false);
   const [pedidoSelecionadoId, setPedidoSelecionadoId] = useState<string | null>(null);

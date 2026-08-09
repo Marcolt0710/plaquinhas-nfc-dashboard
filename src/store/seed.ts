@@ -62,7 +62,7 @@ const RUAS = [
 
 export const LEADS_INICIAIS: Lead[] = [
   {
-    id: gerarId(),
+    id: "lead-1",
     nomeEstabelecimento: "Barbearia Vintage",
     endereco: "Av. JBSQJ, 450",
     rua: RUAS[0],
@@ -94,7 +94,7 @@ export const LEADS_INICIAIS: Lead[] = [
     atualizadoEm: d(-12),
   },
   {
-    id: gerarId(),
+    id: "lead-2",
     nomeEstabelecimento: "Pet Shop Amigo Fiel",
     endereco: "R. dos Alecrins, 88",
     rua: RUAS[2],
@@ -126,7 +126,7 @@ export const LEADS_INICIAIS: Lead[] = [
     atualizadoEm: d(-3),
   },
   {
-    id: gerarId(),
+    id: "lead-3",
     nomeEstabelecimento: "Restaurante Sabor Caseiro",
     endereco: "R. dos Cajueiros, 210",
     rua: RUAS[3],
@@ -158,7 +158,7 @@ export const LEADS_INICIAIS: Lead[] = [
     atualizadoEm: d(-8),
   },
   {
-    id: gerarId(),
+    id: "lead-4",
     nomeEstabelecimento: "Ótica Visão Clara",
     endereco: "R. Manoel Bôsco Ribeiro, 55",
     rua: RUAS[4],
@@ -179,7 +179,7 @@ export const LEADS_INICIAIS: Lead[] = [
     atualizadoEm: d(-6),
   },
   {
-    id: gerarId(),
+    id: "lead-5",
     nomeEstabelecimento: "Hamburgueria do Zé",
     endereco: "Av. Cassiano Ricardo, 1200",
     rua: RUAS[6],
@@ -200,7 +200,7 @@ export const LEADS_INICIAIS: Lead[] = [
     atualizadoEm: d(-1),
   },
   {
-    id: gerarId(),
+    id: "lead-6",
     nomeEstabelecimento: "Padaria Pão Dourado",
     endereco: "R. Ibitinga, 300",
     rua: RUAS[5],
@@ -232,7 +232,7 @@ export const LEADS_INICIAIS: Lead[] = [
     atualizadoEm: d(-2),
   },
   {
-    id: gerarId(),
+    id: "lead-7",
     nomeEstabelecimento: "Estética Bella Pele",
     endereco: "R. Nelson Cesar de Oliveira, 77",
     rua: RUAS[1],
@@ -593,7 +593,7 @@ export const ITENS_ESTOQUE_INICIAIS: ItemEstoque[] = [
 
 export const MOVIMENTOS_ESTOQUE_INICIAIS: MovimentoEstoque[] = [
   {
-    id: gerarId(),
+    id: "mov-1",
     itemId: "item-adesivo",
     data: d(-60),
     tipo: "entrada",
@@ -602,7 +602,7 @@ export const MOVIMENTOS_ESTOQUE_INICIAIS: MovimentoEstoque[] = [
     pedidoId: null,
   },
   {
-    id: gerarId(),
+    id: "mov-2",
     itemId: "item-embalagem",
     data: d(-60),
     tipo: "entrada",
@@ -611,7 +611,7 @@ export const MOVIMENTOS_ESTOQUE_INICIAIS: MovimentoEstoque[] = [
     pedidoId: null,
   },
   {
-    id: gerarId(),
+    id: "mov-3",
     itemId: "item-adesivo",
     data: d(-9),
     tipo: "saida",
@@ -620,7 +620,7 @@ export const MOVIMENTOS_ESTOQUE_INICIAIS: MovimentoEstoque[] = [
     pedidoId: "pedido-2",
   },
   {
-    id: gerarId(),
+    id: "mov-4",
     itemId: "item-embalagem",
     data: d(-9),
     tipo: "saida",
@@ -629,7 +629,7 @@ export const MOVIMENTOS_ESTOQUE_INICIAIS: MovimentoEstoque[] = [
     pedidoId: "pedido-2",
   },
   {
-    id: gerarId(),
+    id: "mov-5",
     itemId: "item-embalagem",
     data: d(-2),
     tipo: "perda",
