@@ -47,3 +47,18 @@ export function inicioDaSemana(iso: string): string {
   data.setHours(0, 0, 0, 0);
   return data.toISOString();
 }
+
+/**
+ * Verdadeiro se a data é hoje ou já passou, comparando por dia (não por
+ * hora exata) — diferente de `estaVencido`, que compara o instante
+ * exato. Usado na Início para "o que precisa de atenção hoje": um prazo
+ * marcado para hoje às 18h deve aparecer na lista mesmo às 9h da manhã.
+ */
+export function ehHojeOuAntes(iso: string | null | undefined): boolean {
+  if (!iso) return false;
+  const alvo = new Date(iso);
+  alvo.setHours(0, 0, 0, 0);
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  return alvo.getTime() <= hoje.getTime();
+}
