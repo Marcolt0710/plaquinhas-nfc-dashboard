@@ -3,6 +3,7 @@ import { Users } from "lucide-react";
 import { EmptyState } from "../components/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
+import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
 import { classesCampo } from "../components/formClasses";
 import { formatDate } from "../lib/format";
 import { ModalNovoCliente } from "../components/clientes/ModalNovoCliente";
@@ -20,6 +21,9 @@ export default function Clientes() {
   const [pedidoSelecionadoId, setPedidoSelecionadoId] = useState<string | null>(null);
 
   usePrimaryAction({ rotulo: "Novo cliente", onClick: () => setModalNovoAberto(true) });
+
+  // Abre a ficha quando a busca global navega para cá com ?abrir=<id>.
+  useAbrirPorParametro(setClienteSelecionadoId);
 
   const clientesFiltrados = useMemo(() => {
     const termo = busca.trim().toLowerCase();

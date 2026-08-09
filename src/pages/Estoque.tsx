@@ -4,6 +4,7 @@ import { Boxes, Nfc, PackageMinus, PackagePlus, TriangleAlert } from "lucide-rea
 import { EmptyState } from "../components/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
+import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
 import { formatBRL } from "../lib/format";
 import { TIPOS_ITEM_ESTOQUE } from "../types";
 import { itemAbaixoDoMinimo } from "../components/estoque/estoqueHelpers";
@@ -26,6 +27,9 @@ export default function Estoque() {
   );
 
   usePrimaryAction({ rotulo: "Novo item", onClick: () => setModalNovoItemAberto(true) });
+
+  // Abre a ficha quando a busca global navega para cá com ?abrir=<id>.
+  useAbrirPorParametro(setItemSelecionadoId);
 
   const etiquetasEmEstoque = etiquetas.filter((e) => e.situacao === "em_estoque").length;
   const etiquetaAbaixoDoMinimo = etiquetasEmEstoque < 10;

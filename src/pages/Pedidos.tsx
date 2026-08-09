@@ -3,6 +3,7 @@ import { ClipboardList, LayoutGrid, List } from "lucide-react";
 import { EmptyState } from "../components/EmptyState";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
+import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
 import { KanbanPedidos } from "../components/pedidos/KanbanPedidos";
 import { TabelaPedidos } from "../components/pedidos/TabelaPedidos";
 import { PainelPedido } from "../components/pedidos/PainelPedido";
@@ -30,6 +31,9 @@ export default function Pedidos() {
   const [clienteSelecionadoId, setClienteSelecionadoId] = useState<string | null>(null);
 
   usePrimaryAction({ rotulo: "Novo pedido", onClick: () => setModalNovoPedidoAberto(true) });
+
+  // Abre a ficha quando a busca global navega para cá com ?abrir=<id>.
+  useAbrirPorParametro(setPedidoSelecionadoId);
 
   function abrirClienteAPartirDoPedido(clienteId: string) {
     setPedidoSelecionadoId(null);

@@ -6,6 +6,7 @@ import { Badge } from "../components/Badge";
 import { classesCampo, classesSelect } from "../components/formClasses";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
+import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
 import type { SituacaoEtiqueta } from "../types";
 import { formatDate } from "../lib/format";
 import {
@@ -35,6 +36,9 @@ export default function Etiquetas() {
   const [quantidadeReposicao, setQuantidadeReposicao] = useState("");
 
   usePrimaryAction({ rotulo: "Gravar etiqueta", onClick: () => setFluxoGravacaoAberto(true) });
+
+  // Abre a ficha quando a busca global navega para cá com ?abrir=<id>.
+  useAbrirPorParametro(setEtiquetaSelecionadaId);
 
   const emEstoque = etiquetas.filter((e) => e.situacao === "em_estoque").length;
   const estoqueBaixo = emEstoque < LIMITE_ESTOQUE_BAIXO;

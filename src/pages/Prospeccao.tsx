@@ -5,6 +5,7 @@ import { Badge } from "../components/Badge";
 import { classesCampo, classesSelect } from "../components/formClasses";
 import { useAppStore } from "../store/useAppStore";
 import { usePrimaryAction } from "../lib/usePrimaryAction";
+import { useAbrirPorParametro } from "../lib/useAbrirPorParametro";
 import { CATEGORIAS_LEAD, SITUACOES_LEAD, type CategoriaLead, type Lead, type SituacaoLead } from "../types";
 import { formatDate } from "../lib/format";
 import {
@@ -31,6 +32,9 @@ export default function Prospeccao() {
   const [leadSelecionadoId, setLeadSelecionadoId] = useState<string | null>(null);
 
   usePrimaryAction({ rotulo: "Novo lead", onClick: () => setModalNovoLeadAberto(true) });
+
+  // Abre a ficha quando a busca global navega para cá com ?abrir=<id>.
+  useAbrirPorParametro(setLeadSelecionadoId);
 
   const ruas = useMemo(() => Array.from(new Set(leads.map((l) => l.rua))).sort(), [leads]);
 

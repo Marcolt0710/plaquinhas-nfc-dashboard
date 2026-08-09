@@ -260,3 +260,12 @@ select,
 button {
   font-family: inherit;
 }
+
+/* O "x" nativo do type="search" aparece junto do nosso botão de limpar,
+   e o campo fica com dois. Some com o nativo e fica só o que a gente
+   controla — que também funciona no Firefox, onde o nativo não existe. */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}

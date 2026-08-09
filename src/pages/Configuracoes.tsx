@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
-import { CheckCircle2, Pencil, Plus } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 import { useAppStore, custoTotalPorPlaca } from "../store/useAppStore";
+import { mostrarToast } from "../store/useUiStore";
 import { Badge } from "../components/Badge";
 import {
   classesBotaoPerigo,
@@ -11,7 +12,6 @@ import {
 } from "../components/formClasses";
 import { formatBRL } from "../lib/format";
 import { ModalPacote } from "../components/configuracoes/ModalPacote";
-import { useMensagemSucesso } from "../components/configuracoes/useMensagemSucesso";
 import type { CustosUnitarios, Pacote } from "../types";
 
 const CAMPOS_CUSTO: { chave: keyof Omit<CustosUnitarios, "taxaPerdaPercentual">; rotulo: string }[] = [
@@ -23,16 +23,6 @@ const CAMPOS_CUSTO: { chave: keyof Omit<CustosUnitarios, "taxaPerdaPercentual">;
   { chave: "embalagem", rotulo: "Embalagem" },
 ];
 
-function SucessoInline({ mensagem }: { mensagem: string | null }) {
-  if (!mensagem) return null;
-  return (
-    <p className="flex items-center gap-1.5 text-sm text-accent">
-      <CheckCircle2 size={16} />
-      {mensagem}
-    </p>
-  );
-}
-
 export default function Configuracoes() {
   const configuracao = useAppStore((state) => state.configuracao);
   const atualizarCustosUnitarios = useAppStore((state) => state.atualizarCustosUnitarios);
@@ -41,22 +31,20 @@ export default function Configuracoes() {
 
   // --- Custos unitários -------------------------------------------------
   const [custosForm, setCustosForm] = useState<CustosUnitarios>(configuracao.custosUnitarios);
-  const sucessoCustos = useMensagemSucesso();
 
   function aoSalvarCustos(evento: FormEvent) {
     evento.preventDefault();
     atualizarCustosUnitarios(custosForm);
-    sucessoCustos.mostrar("Custos salvos.");
+    mostrarToast("Custos salvos.");
   }
 
   // --- Marca / sócios / prazos -------------------------------------------
   const [marcaForm, setMarcaForm] = useState(configuracao.marca);
-  const sucessoMarca = useMensagemSucesso();
 
   function aoSalvarMarca(evento: FormEvent) {
     evento.preventDefault();
     atualizarMarca(marcaForm);
-    sucessoMarca.mostrar("Dados salvos.");
+    mostrarToast("Dados salvos.");
   }
 
   // --- Pacotes -----------------------------------------------------------
@@ -131,7 +119,6 @@ export default function Configuracoes() {
           <button type="submit" className={classesBotaoPrimario}>
             Salvar custos
           </button>
-          <SucessoInline mensagem={sucessoCustos.mensagem} />
         </div>
       </form>
 
@@ -345,7 +332,6 @@ export default function Configuracoes() {
           <button type="submit" className={classesBotaoPrimario}>
             Salvar dados
           </button>
-          <SucessoInline mensagem={sucessoMarca.mensagem} />
         </div>
       </form>
 
