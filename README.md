@@ -26,10 +26,15 @@ npm run dev      # http://localhost:5173
 Outros comandos: `npm run build` (produção), `npm run preview` (serve o build),
 `npm run lint`.
 
-O app já abre populado com dados de demonstração que usam os números reais do
-negócio (custos por placa, preços dos pacotes, ruas do roteiro), para dar para
-testar tudo antes da primeira operação real. Todo registro pode ser editado ou
-apagado.
+**O app abre vazio.** Nenhum cliente, pedido ou faturamento vem preenchido: todo
+número que aparecer na tela veio de algo que você cadastrou. Se quiser conhecer o
+sistema antes de operar, há um botão em Configurações que carrega dados de
+demonstração — e outro que apaga tudo, para você começar limpo antes da primeira
+venda de verdade.
+
+A única coisa que já vem preenchida são os custos por placa e os preços dos
+pacotes, em Configurações. Não são estatística: são os números reais do negócio,
+ali só para você não precisar digitar tudo antes do primeiro uso.
 
 ## Módulos
 

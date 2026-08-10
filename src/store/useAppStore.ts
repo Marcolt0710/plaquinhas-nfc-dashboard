@@ -119,6 +119,10 @@ interface AppState {
 
   // --- Backup ---------------------------------------------------------------
   mesclarBackup: (arquivo: ArquivoBackup) => ResumoMesclagem;
+
+  // --- Dados ----------------------------------------------------------------
+  carregarDemonstracao: () => void;
+  apagarTodosOsDados: () => void;
 }
 
 function registrarSaida(
@@ -147,12 +151,21 @@ function registrarSaida(
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      leads: LEADS_INICIAIS,
-      clientes: CLIENTES_INICIAIS,
-      pedidos: PEDIDOS_INICIAIS,
-      etiquetas: ETIQUETAS_INICIAIS,
-      itensEstoque: ITENS_ESTOQUE_INICIAIS,
-      movimentosEstoque: MOVIMENTOS_ESTOQUE_INICIAIS,
+      // O app começa vazio, de propósito. Nada de cliente, pedido ou
+      // faturamento inventado: todo número que aparecer na tela veio de
+      // algo que vocês cadastraram. Os dados de demonstração continuam
+      // existindo, mas só entram se pedirem, em Configurações.
+      //
+      // A configuração é a exceção e não é estatística: custo do
+      // filamento, do adesivo, do QR, a taxa de perda e os preços dos
+      // pacotes são os números reais do negócio, e servem de ponto de
+      // partida em vez de obrigar a digitar tudo antes do primeiro uso.
+      leads: [],
+      clientes: [],
+      pedidos: [],
+      etiquetas: [],
+      itensEstoque: [],
+      movimentosEstoque: [],
       configuracao: CONFIGURACAO_INICIAL,
 
       // ---------------------------------------------------------------- Leads
@@ -622,6 +635,32 @@ export const useAppStore = create<AppState>()(
           movimentosEstoque.resumo,
         ]);
       },
+
+      // -------------------------------------------------------------- Dados
+      carregarDemonstracao: () => {
+        set({
+          leads: LEADS_INICIAIS,
+          clientes: CLIENTES_INICIAIS,
+          pedidos: PEDIDOS_INICIAIS,
+          etiquetas: ETIQUETAS_INICIAIS,
+          itensEstoque: ITENS_ESTOQUE_INICIAIS,
+          movimentosEstoque: MOVIMENTOS_ESTOQUE_INICIAIS,
+        });
+      },
+
+      // Não zera a configuração: custos e pacotes são o que vocês
+      // ajustaram, não registro de operação.
+      apagarTodosOsDados: () => {
+        set({
+          leads: [],
+          clientes: [],
+          pedidos: [],
+          etiquetas: [],
+          itensEstoque: [],
+          movimentosEstoque: [],
+        });
+      },
+
     }),
     {
       name: "plaquinhas-nfc-dashboard",
