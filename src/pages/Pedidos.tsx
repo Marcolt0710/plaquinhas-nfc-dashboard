@@ -9,7 +9,6 @@ import { KanbanPedidos } from "../components/pedidos/KanbanPedidos";
 import { TabelaPedidos } from "../components/pedidos/TabelaPedidos";
 import { PainelPedido } from "../components/pedidos/PainelPedido";
 import { ModalNovoPedido } from "../components/pedidos/ModalNovoPedido";
-import { ModalNovoCliente } from "../components/clientes/ModalNovoCliente";
 import { PainelCliente } from "../components/clientes/PainelCliente";
 import { BotaoExportarCsv } from "../components/BotaoExportarCsv";
 import { exportarCsv } from "../lib/csv";
@@ -34,7 +33,6 @@ export default function Pedidos() {
   const padraoDoDispositivo = useMemo(visaoPadrao, []);
   const visao = visaoEscolhida === "auto" ? padraoDoDispositivo : visaoEscolhida;
   const [modalNovoPedidoAberto, setModalNovoPedidoAberto] = useState(false);
-  const [modalNovoClienteAberto, setModalNovoClienteAberto] = useState(false);
   const [pedidoSelecionadoId, setPedidoSelecionadoId] = useState<string | null>(null);
   const [clienteSelecionadoId, setClienteSelecionadoId] = useState<string | null>(null);
 
@@ -79,19 +77,6 @@ export default function Pedidos() {
           onCriado={(id) => {
             setModalNovoPedidoAberto(false);
             setPedidoSelecionadoId(id);
-          }}
-          onIrParaNovoCliente={() => {
-            setModalNovoPedidoAberto(false);
-            setModalNovoClienteAberto(true);
-          }}
-        />
-      )}
-      {modalNovoClienteAberto && (
-        <ModalNovoCliente
-          onFechar={() => setModalNovoClienteAberto(false)}
-          onCriado={() => {
-            setModalNovoClienteAberto(false);
-            setModalNovoPedidoAberto(true);
           }}
         />
       )}
