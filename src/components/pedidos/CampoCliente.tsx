@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { Check, UserPlus, X } from "lucide-react";
+import { Check, Footprints, UserPlus, X } from "lucide-react";
 import { useAppStore } from "../../store/useAppStore";
 import { classesCampo, classesLabel } from "../formClasses";
+import { SITUACOES_LEAD } from "../../types";
 
 interface CampoClienteProps {
   /** Nome digitado. Vira cliente novo se não casar com nenhum existente. */
@@ -10,6 +11,9 @@ interface CampoClienteProps {
   /** Id do cliente existente escolhido, ou null quando é nome novo. */
   clienteId: string | null;
   onClienteId: (id: string | null) => void;
+  /** Id do lead (possível cliente) escolhido na prospecção, ou null. */
+  leadId: string | null;
+  onLeadId: (id: string | null) => void;
 }
 
 function normalizar(texto: string) {
@@ -29,13 +33,28 @@ function normalizar(texto: string) {
  * histórico continua ligado ao mesmo registro; se é novo, ele é criado
  * junto com o pedido, e os dados de contato entram depois com calma.
  */
-export function CampoCliente({ nome, onNome, clienteId, onClienteId }: CampoClienteProps) {
+export function CampoCliente({
+  nome,
+  onNome,
+  clienteId,
+  onClienteId,
+  leadId,
+  onLeadId,
+}: CampoClienteProps) {
   const clientes = useAppStore((s) => s.clientes);
+  const leads = useAppStore((s) => s.leads);
   const [focado, setFocado] = useState(false);
 
   const selecionado = clientes.find((c) => c.id === clienteId) ?? null;
+  // Leads já convertidos (clienteId preenchido) ou descartados não são mais
+  // "possível cliente" — não fazem sentido como sugestão aqui.
+  const leadsAbertos = useMemo(
+    () => leads.filter((l) => l.clienteId === null && l.situacao !== "descartado"),
+    [leads],
+  );
+  const leadSelecionado = leadsAbertos.find((l) => l.id === leadId) ?? null;
 
-  const sugestoes = useMemo(() => {
+  const sugestoesClientes = useMemo(() => {
     const termo = normalizar(nome);
     if (!termo) return [];
     return clientes
@@ -43,10 +62,19 @@ export function CampoCliente({ nome, onNome, clienteId, onClienteId }: CampoClie
       .slice(0, 5);
   }, [clientes, nome]);
 
-  const casaExatamente = clientes.some(
-    (c) => normalizar(c.nomeEstabelecimento) === normalizar(nome),
-  );
-  const seraNovo = nome.trim().length > 0 && !selecionado && !casaExatamente;
+  const sugestoesLeads = useMemo(() => {
+    const termo = normalizar(nome);
+    if (!termo) return [];
+    return leadsAbertos
+      .filter((l) => normalizar(l.nomeEstabelecimento).includes(termo))
+      .slice(0, 5);
+  }, [leadsAbertos, nome]);
+
+  const casaExatamente =
+    clientes.some((c) => normalizar(c.nomeEstabelecimento) === normalizar(nome)) ||
+    leadsAbertos.some((l) => normalizar(l.nomeEstabelecimento) === normalizar(nome));
+  const seraNovo =
+    nome.trim().length > 0 && !selecionado && !leadSelecionado && !casaExatamente;
 
   if (selecionado) {
     return (
@@ -78,6 +106,36 @@ export function CampoCliente({ nome, onNome, clienteId, onClienteId }: CampoClie
     );
   }
 
+  if (leadSelecionado) {
+    return (
+      <div>
+        <span className={classesLabel}>Cliente</span>
+        <div className="flex items-center justify-between gap-3 rounded-sm border border-border bg-input px-3 py-2.5">
+          <span className="flex min-w-0 items-center gap-2">
+            <Footprints size={16} className="shrink-0 text-accent" aria-hidden="true" />
+            <span className="truncate text-base text-primary">
+              {leadSelecionado.nomeEstabelecimento}
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              onLeadId(null);
+              onNome("");
+            }}
+            className="shrink-0 rounded p-1 text-secondary hover:text-primary"
+            aria-label="Trocar de cliente"
+          >
+            <X size={15} aria-hidden="true" />
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-secondary">
+          Possível cliente da prospecção — vira cliente novo ao salvar o pedido.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       <label className={classesLabel} htmlFor="pedido-cliente">
@@ -96,27 +154,60 @@ export function CampoCliente({ nome, onNome, clienteId, onClienteId }: CampoClie
         autoComplete="off"
       />
 
-      {focado && sugestoes.length > 0 && (
+      {focado && (sugestoesClientes.length > 0 || sugestoesLeads.length > 0) && (
         <div className="absolute left-0 right-0 z-10 mt-1 overflow-hidden rounded-md border border-border bg-card">
-          <p className="px-3 pb-1 pt-2 text-xs uppercase tracking-wide text-secondary">
-            Clientes já cadastrados
-          </p>
-          {sugestoes.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => {
-                onClienteId(c.id);
-                onNome(c.nomeEstabelecimento);
-              }}
-              className="block w-full px-3 py-2 text-left hover:bg-card-hover"
-            >
-              <span className="block truncate text-sm text-primary">{c.nomeEstabelecimento}</span>
-              {c.nomeResponsavel && (
-                <span className="block truncate text-xs text-secondary">{c.nomeResponsavel}</span>
-              )}
-            </button>
-          ))}
+          {sugestoesClientes.length > 0 && (
+            <>
+              <p className="px-3 pb-1 pt-2 text-xs uppercase tracking-wide text-secondary">
+                Clientes já cadastrados
+              </p>
+              {sugestoesClientes.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => {
+                    onClienteId(c.id);
+                    onLeadId(null);
+                    onNome(c.nomeEstabelecimento);
+                  }}
+                  className="block w-full px-3 py-2 text-left hover:bg-card-hover"
+                >
+                  <span className="block truncate text-sm text-primary">{c.nomeEstabelecimento}</span>
+                  {c.nomeResponsavel && (
+                    <span className="block truncate text-xs text-secondary">{c.nomeResponsavel}</span>
+                  )}
+                </button>
+              ))}
+            </>
+          )}
+
+          {sugestoesLeads.length > 0 && (
+            <>
+              <p className="px-3 pb-1 pt-2 text-xs uppercase tracking-wide text-secondary">
+                Possíveis clientes (prospecção)
+              </p>
+              {sugestoesLeads.map((l) => (
+                <button
+                  key={l.id}
+                  type="button"
+                  onClick={() => {
+                    onLeadId(l.id);
+                    onClienteId(null);
+                    onNome(l.nomeEstabelecimento);
+                  }}
+                  className="block w-full px-3 py-2 text-left hover:bg-card-hover"
+                >
+                  <span className="flex items-center gap-1.5 truncate text-sm text-primary">
+                    <Footprints size={12} className="shrink-0 text-secondary" aria-hidden="true" />
+                    {l.nomeEstabelecimento}
+                  </span>
+                  <span className="block truncate text-xs text-secondary">
+                    {SITUACOES_LEAD.find((s) => s.value === l.situacao)?.label ?? l.situacao}
+                  </span>
+                </button>
+              ))}
+            </>
+          )}
         </div>
       )}
 

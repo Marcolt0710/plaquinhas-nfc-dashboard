@@ -22,13 +22,16 @@ export function ModalNovoPedido({
   clienteIdInicial,
 }: ModalNovoPedidoProps) {
   const clientes = useAppStore((state) => state.clientes);
+  const leads = useAppStore((state) => state.leads);
   const todosPacotes = useAppStore((state) => state.configuracao.pacotes);
   const pacotes = useMemo(() => todosPacotes.filter((p) => p.ativo), [todosPacotes]);
   const addPedido = useAppStore((state) => state.addPedido);
   const addCliente = useAppStore((state) => state.addCliente);
+  const converterLeadEmCliente = useAppStore((state) => state.converterLeadEmCliente);
 
   const clienteInicial = clientes.find((c) => c.id === clienteIdInicial);
   const [clienteId, setClienteId] = useState<string | null>(clienteIdInicial ?? null);
+  const [leadId, setLeadId] = useState<string | null>(null);
   const [nomeCliente, setNomeCliente] = useState(clienteInicial?.nomeEstabelecimento ?? "");
   const [pacoteId, setPacoteId] = useState(pacotes[0]?.id ?? "");
   const [valorCobrado, setValorCobrado] = useState(String(pacotes[0]?.preco ?? ""));
@@ -54,29 +57,59 @@ export function ModalNovoPedido({
         (c) => c.nomeEstabelecimento.trim().toLowerCase() === nome.toLowerCase(),
       );
 
+    // Possível cliente escolhido na prospecção: vira cliente de verdade
+    // agora, sem perder o vínculo com o lead que a visita já registrou.
+    const leadEscolhido = existente
+      ? null
+      : (leads.find((l) => l.id === leadId) ??
+        leads.find(
+          (l) =>
+            l.clienteId === null &&
+            l.nomeEstabelecimento.trim().toLowerCase() === nome.toLowerCase(),
+        ));
+
     const idDoCliente =
       existente?.id ??
-      addCliente({
-        nomeEstabelecimento: nome,
-        nomeResponsavel: "",
-        telefoneResponsavel: "",
-        endereco: "",
-        linkAvaliacaoGoogle: "",
-        linkEncurtado: "",
-        dataPrimeiroPedido: new Date(dataVenda).toISOString(),
-        indicadoPorClienteId: null,
-        leadOrigemId: null,
-        observacoes: "",
-      });
+      (leadEscolhido
+        ? converterLeadEmCliente(leadEscolhido.id, {
+            nomeEstabelecimento: nome,
+            nomeResponsavel: "",
+            telefoneResponsavel: "",
+            endereco: leadEscolhido.endereco,
+            linkAvaliacaoGoogle: "",
+            linkEncurtado: "",
+            dataPrimeiroPedido: new Date(dataVenda).toISOString(),
+            indicadoPorClienteId: null,
+            observacoes: "",
+          })
+        : addCliente({
+            nomeEstabelecimento: nome,
+            nomeResponsavel: "",
+            telefoneResponsavel: "",
+            endereco: "",
+            linkAvaliacaoGoogle: "",
+            linkEncurtado: "",
+            dataPrimeiroPedido: new Date(dataVenda).toISOString(),
+            indicadoPorClienteId: null,
+            leadOrigemId: null,
+            observacoes: "",
+          }));
 
     const id = addPedido({
       clienteId: idDoCliente,
       pacoteId,
       valorCobrado: valorCobrado ? Number(valorCobrado) : undefined,
       dataVenda: new Date(dataVenda).toISOString(),
+      leadOrigemId: leadEscolhido?.id ?? null,
       observacoes: observacoes.trim(),
     });
-    mostrarToast(existente ? "Pedido salvo." : "Pedido e cliente salvos.");
+    mostrarToast(
+      existente
+        ? "Pedido salvo."
+        : leadEscolhido
+          ? "Pedido salvo — possível cliente virou cliente."
+          : "Pedido e cliente salvos.",
+    );
     onCriado(id);
   }
 
@@ -104,6 +137,8 @@ export function ModalNovoPedido({
           onNome={setNomeCliente}
           clienteId={clienteId}
           onClienteId={setClienteId}
+          leadId={leadId}
+          onLeadId={setLeadId}
         />
 
         <div>
