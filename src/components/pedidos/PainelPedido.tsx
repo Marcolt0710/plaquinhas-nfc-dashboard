@@ -198,8 +198,8 @@ export function PainelPedido({ pedidoId, onFechar, onAbrirCliente }: PainelPedid
             <p className="text-xs uppercase tracking-wide text-secondary">Etiquetas NFC</p>
             {pedido.etiquetasIds.length === 0 ? (
               <p className="mt-1 text-sm text-secondary">
-                Nenhuma etiqueta associada ainda. Etiquetas são geridas no módulo Etiquetas NFC, que chega
-                na próxima fase.
+                Nenhuma etiqueta associada ainda. A gravação é feita na tela Etiquetas NFC, que lista
+                este pedido enquanto faltar etiqueta.
               </p>
             ) : (
               <p className="mt-1 text-sm text-primary">
